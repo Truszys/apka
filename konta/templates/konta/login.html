@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pl">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Bootstrap - Prebuilt Layout</title>
+
+		<!-- Bootstrap -->
+		<link href="{% static 'css/bootstrap-4.3.1.css' %}" rel="stylesheet">
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<br><br>
+		<div id="login">
+			<div class="container">
+				<div id="login-row" class="row justify-content-center align-items-center">
+					<div id="login-column" class="col-md-6">
+						<div id="login-box" class="col-md-12">
+							<form id="login-form" class="form" action="" method="POST">
+								{% csrf_token %}
+								<h3 class="text-center text-info">Logowanie</h3>
+								<div class="form-group">
+									<label for="username" class="text-info">Nazwa:</label>
+									<input type="text" name="nazwa" id="username" class="form-control" required="">
+								</div>
+								<div class="form-group">
+									<label for="password" class="text-info">Hasło:</label>
+									<input type="password" name="haslo" id="password" class="form-control" required="">
+								</div>
+								<div class="form-group">
+									{% for i in messages %}
+										<p class="text-danger">{{messages}}</p>
+									{% endfor %}
+									<input type="submit" name="submit" class="btn btn-info btn-md" value="Zaloguj">
+								</div>
+								<div id="register-link" class="text-right">
+									<p>Nie masz konta? <a href="/register" class="text-info">Zarejestruj się</a></p>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

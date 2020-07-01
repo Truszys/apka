@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pl">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Bootstrap - Prebuilt Layout</title>
+
+		<!-- Bootstrap -->
+		<link href="{% static 'css/bootstrap-4.3.1.css' %}" rel="stylesheet">
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<br><br>
+		<div id="add">
+			<div class="container">
+				<h1 class="display-4">Nie możesz edytować/usunąć tego nawyku, spróbuj ponownie</h1>
+				<a class="btn btn-info" href="{% url 'nawyki' %}">Powrót</a>
+			</div>
+		</div>
+	</body>
+</html>
