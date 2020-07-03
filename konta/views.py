@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 from .forms import CreateUserForm, NawykiForm
 
@@ -122,4 +122,31 @@ def usunNawyk(request, pk):
 
 @login_required(login_url='login')
 def statystyki(request):
-    return render(request, 'konta/statystyki.html')
+    nawyk = Nawyki.objects.filter(user_id=request.user.id)
+    idn = [nawyki.id for nawyki in nawyk]
+    if request.method == 'POST':
+        start_date = datetime.strptime(request.POST.get('date-from'), "%Y-%m-%d").date()
+        end_date = datetime.strptime(request.POST.get('date-to'), "%Y-%m-%d").date()
+    else:
+        end_date = date.today()
+        start_date = end_date - timedelta(7)
+    labels = [single_date.strftime("%d.%m.%Y") for single_date in daterange(start_date, end_date)]
+    data = []
+    for single_date in daterange(start_date, end_date):
+        temp = 0
+        for id in idn:
+            temp += Daty.objects.filter(data=single_date, idNawyki=id).count()
+        data += [temp]
+    context = {
+        'labels':labels,
+        'data':data,
+        'time':date.today(),
+    }
+    return render(request, 'konta/statystyki.html', context)
+
+def daterange(start_date, end_date):
+    for n in range(int((end_date - start_date).days)+1):
+        yield start_date + timedelta(n)
+
+start_date = date(2013, 1, 1)
+end_date = date(2015, 6, 2)

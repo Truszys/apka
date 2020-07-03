@@ -31,7 +31,17 @@
 
 		<div class="jumbotron jumbotron-fluid text-center">
 			<h3 class="display-4">Twoje statystyki</h1>
-			
+			<form method="POST">
+				{% csrf_token %}
+				<label name="date-from">Od: </label>
+				<input type="date" max="{{ time|date:'Y-m-d'}}" name="date-from" required>
+				<label name="date-to">do: </label>
+				<input type="date" max="{{ time|date:'Y-m-d'}}" name="date-to" required>
+				<input type="submit" value="Filtruj" class="btn-info">
+				<div>	
+					<canvas class="" id="Chart" style="max-width: 60%; max-height: 90%; margin: auto"></canvas>
+				</div>
+			</form>
 		</div>
 		<div class="card-footer fixed-bottom">
 			<div class="text-center col-lg-6 offset-lg-3">
@@ -43,5 +53,31 @@
 		<!-- Include all compiled plugins (below), or include individual files as needed --> 
 		<script src="{% static 'js/popper.min.js' %}"></script>
 		<script src="{% static 'js/bootstrap-4.3.1.js' %}"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+		<script type="text/javascript">
+			var ctx = document.getElementById('Chart');
+			var myChart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: ['{{ labels|join:"', '" }}'],
+					datasets: [{
+						label: 'Liczba wykonanych rzeczy',
+						data: {{ data }},
+						backgroundColor: 'rgba(255, 0, 0, 0.2)',
+						borderColor: 'rgba(255, 0, 0, 1)',
+						borderWidth: 1
+					}]
+				},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}]
+					}
+				}
+			});
+		</script>
 	</body>
 </html>
