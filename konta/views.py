@@ -3,25 +3,29 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from datetime import date, datetime
 
 from .forms import CreateUserForm, NawykiForm
 
-from .models import Nawyki
+from .models import Nawyki, Daty
 
 # Create your views here.
 
 def index(request):
     if request.user.is_authenticated:
         nawyk = Nawyki.objects.filter(user_id=request.user.id)
-        form = NawykiForm()
+        nawyk = nawyk.filter(Q(koniec=None) | Q(koniec__gte=date.today()))
+        data = [(id.id, Daty.objects.filter(idNawyki=id.id, data=date.today()).count()) for id in nawyk]
         if request.method == 'POST':
-            form = NawykiForm(request.POST)
-            print(request.POST, request.POST.get('dzisiaj_zrobione'))
-            if form.is_valid():
-                form.save()
-                return redirect('home')
-        context = {'form':form, 'nawyki':nawyk, 'time':date.today()}
+            temp = Daty.objects.filter(idNawyki=request.POST.get('id'), data=date.today()).count()
+            if temp == 0:
+                temp1 = Daty(idNawyki_id=request.POST.get('id'))
+                temp1.save()
+            else:
+                Daty.objects.filter(idNawyki=request.POST.get('id'), data=date.today()).delete()
+            return redirect('home')
+        context = {'daty':data, 'nawyki':nawyk, 'time':date.today()}
         return render(request, 'konta/indexu.html', context)
     else:
         return render(request, 'konta/index.html')
@@ -64,9 +68,12 @@ def registerP(request):
 @login_required(login_url='login')
 def nawyki(request):
     nawyk = Nawyki.objects.filter(user_id=request.user.id)
+    nawyk = nawyk.order_by('-koniec')
+    data =[(id.id, Daty.objects.filter(idNawyki=id.id).count()) for id in nawyk]
     context = {
         'time':date.today(),
-        'nawyki':nawyk
+        'nawyki':nawyk,
+        'data':data
     }
     return render(request, 'konta/nawyki.html', context)
 

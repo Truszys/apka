@@ -14,6 +14,6 @@ class NawykiForm(ModelForm):
     class Meta:
         model = Nawyki
         widgets = {
-            'nazwa': forms.TextInput(attrs={'class': 'form-control'}),
+            'nazwa': forms.TextInput(attrs={'class': 'form-control'})
         }
-        fields = ['nazwa', 'koniec', 'user_id', 'dzisiaj_zrobione']
+        fields = ['nazwa', 'koniec', 'user_id']

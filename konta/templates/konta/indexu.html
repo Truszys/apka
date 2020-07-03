@@ -30,35 +30,34 @@
 		</nav>
 		<div class="jumbotron jumbotron-fluid text-center">
 			<h3 class="display-4">Twoje nawyki na dziś</h3>
-			<form class="form" method="POST">
-				{% csrf_token %}
-				<table class="table table-hover">
-					<thead>
-					{% for nawyk in nawyki %}
-						{% if nawyk.koniec >= time or nawyk.koniec == null %}
-							{% if nawyk.dzisiaj_zrobione == False %}
+			{% csrf_token %}
+			<table class="table table-hover">
+				<thead>
+				{% for nawyk in nawyki %}
+					{% for x, y in daty %}
+						{% if x == nawyk.id %}
+							{% if y == 0 %}
 								<tr>
 									<td>{{nawyk.nazwa}}</td>
-									<td><input type="checkbox" name="dzisiaj_zrobione" value="{{nawyk.id}}"></td>
+									<td><input type="checkbox" name="dzisiaj_zrobione" id="dzisiaj_zrobione" value="{{nawyk.id}}" onclick="Nawyki(this.value);"></td>
 								</tr>
 							{% endif %}
 						{% endif %}
 					{% endfor %}
-					{% for nawyk in nawyki %}
-						{% if nawyk.koniec >= time or nawyk.koniec == null %}
-							{% if nawyk.dzisiaj_zrobione == True %}
-							<tr class="alert-success">
+				{% endfor %}
+				{% for nawyk in nawyki %}
+					{% for x, y in daty %}
+						{% if x == nawyk.id %}
+							{% if y == 1 %}
+								<tr class="alert-success">
 									<td>{{nawyk.nazwa}}</td>
-									<td>
-										<input type="checkbox" name="dzisiaj_zrobione" value="{{nawyk.id}}" checked="">
-									</td>
+									<td><input type="checkbox" name="dzisiaj_zrobione" id="dzisiaj_zrobione" value="{{nawyk.id}}" checked="" onclick="Nawyki(this.value);"></td>
 								</tr>
 							{% endif %}
 						{% endif %}
 					{% endfor %}
-				</table>
-				<input type="submit" value="Zapisz" class="btn-info">
-			</form>
+				{% endfor %}
+			</table>
 		</div>
 		<div class="card-footer fixed-bottom">
 			<div class="text-center col-lg-6 offset-lg-3">
@@ -71,5 +70,23 @@
 		<!-- Include all compiled plugins (below), or include individual files as needed --> 
 		<script src="{% static 'js/popper.min.js' %}"></script>
 		<script src="{% static 'js/bootstrap-4.3.1.js' %}"></script>
+		<script type="text/javascript">
+			function Nawyki(id)
+			{
+				$.ajax({
+					type: "POST",
+					url: "{% url 'home' %}",
+					data: {
+						csrfmiddlewaretoken: '{{ csrf_token }}',
+						id: id,
+					}
+				});
+				setTimeout(
+					function(){
+						location.href = "{% url 'home' %}";
+					},
+				60);
+			}
+		</script>
 	</body>
 </html>

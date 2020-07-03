@@ -40,7 +40,6 @@
 						<th>Ilość ukończonych</th>
 					</tr>
 				</thead>
-				
 				{% for nawyk in nawyki %}
 					<tr>
 						<td>{{nawyk.nazwa}}</td>
@@ -54,10 +53,14 @@
 							<td class="text-info">Dzisiaj</td>
 						{% elif nawyk.koniec > time %}
 							<td>{{ nawyk.koniec | timeuntil:time }} do końca</td>
-						{% else %}
+						{% elif nawyk.koniec < time %}
 							<td class="text-success">Ukończono</td>
 						{% endif %}
-						<td>{{nawyk.zrobione}}</td>
+						{% for i, j in data %}
+							{% if i == nawyk.id %}
+								<td>{{j}}</td>
+							{% endif %}
+						{% endfor %}
 					</tr>
 				{% endfor %}
 			</table>

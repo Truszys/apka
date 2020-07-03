@@ -19,8 +19,8 @@
 			<div class="collapse navbar-collapse" id="navbarCollapse">
 				<div class="navbar-nav">
 					<a href="{% url 'home' %}" class="nav-item nav-link">Strona główna</a>
-					<a href="{% url 'nawyki' %}" class="nav-item nav-link active">Moje nawyki</a>
-					<a href="{% url 'stats' %}" class="nav-item nav-link">Statystyki</a>
+					<a href="{% url 'nawyki' %}" class="nav-item nav-link">Moje nawyki</a>
+					<a href="{% url 'stats' %}" class="nav-item nav-link active">Statystyki</a>
 				</div>
 				<div class="navbar-nav ml-auto">
 					<span class="nav-item nav-link active">Witaj {{request.user}}</span>
@@ -31,15 +31,7 @@
 
 		<div class="jumbotron jumbotron-fluid text-center">
 			<h3 class="display-4">Twoje statystyki</h1>
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th class="">Nazwa</th>
-						<th class="">Data zakończenia</th>
-						<th class="">Ilość ukończonych</th>
-					</tr>
-				</thead>
-			</table>
+			
 		</div>
 		<div class="card-footer fixed-bottom">
 			<div class="text-center col-lg-6 offset-lg-3">
